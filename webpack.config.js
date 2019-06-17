@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
-  entry: "./psyche/webpack-entry.tsx",
+  entry: "./psyche/debug/render-app.tsx",
   mode: "development",
   output: {
     filename: "bundle.js"
