@@ -1,0 +1,52 @@
+{
+  "name": "psyche",
+  "version": "0.0.1",
+  "description": "A personalized external brain.",
+  "scripts": {
+    "lint": "tslint psyche/**/*.ts psyche/**/*.tsx",
+    "start": "webpack-dev-server --open",
+    "test": "npm run test:unit; npm run test:e2e",
+    "test:e2e": "cypress run",
+    "test:e2e:watch": "cypress open",
+    "test:unit": "mocha -r ts-node/register -r tsconfig-paths/register -r source-map-support/register psyche/**/*.test.ts psyche/**/*.test.tsx",
+    "test:unit:watch": "npm run test:unit -- --watch",
+    "test:unit:coverage": "nyc npm run test:unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/courageousillumination/psyche3.git"
+  },
+  "author": "Tristan Rasmussen",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/courageousillumination/psyche3/issues"
+  },
+  "homepage": "https://github.com/courageousillumination/psyche3#readme",
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^4.1.0",
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/react-dom": "^16.8.4",
+    "@types/react": "^16.8.20",
+    "chai": "^4.2.0",
+    "cypress": "^3.3.1",
+    "html-webpack-plugin": "^3.2.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "source-map-support": "^0.5.12",
+    "ts-loader": "^6.0.3",
+    "ts-node": "^8.3.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.2",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.1",
+    "webpack": "^4.34.0"
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
