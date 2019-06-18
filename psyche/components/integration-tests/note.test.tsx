@@ -15,4 +15,13 @@ describe("note interactions", () => {
       expect(wrapper).to.include.text(NOTE_STRING);
     });
   });
+
+  describe("deleting a note", () => {
+    it("should remove the note", () => {
+      const wrapper = mount(<Psyche />);
+      wrapper.setState({ notes: [NOTE_STRING] });
+      wrapper.find("button").simulate("click");
+      expect(wrapper).not.to.include.text(NOTE_STRING);
+    });
+  });
 });

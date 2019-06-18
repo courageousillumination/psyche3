@@ -1,8 +1,6 @@
 {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "all": true,
-    "include": [
-      "psyche/**/*.ts",
-      "psyche/**/*.tsx"
-    ]
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "include": ["psyche/**/*.ts", "psyche/**/*.tsx"],
+  "require": ["ts-node/register"]
 }
