@@ -1,16 +1,26 @@
 import ImportExportArea from "psyche/components/import-export-area";
 import NewNoteForm from "psyche/components/new-note-form";
 import NoteCard from "psyche/components/note-card";
+import { Dispatch, RootState } from "psyche/store";
 import React from "react";
 import { connect } from "react-redux";
 
-export interface Props {
-  notes: string[];
+interface DispatchProps {
   addNote: (note: string) => void;
   deleteNote: (noteId: number) => void;
+  loadNotes: () => void;
 }
 
+interface StateProps {
+  notes: string[];
+}
+
+export type Props = DispatchProps & StateProps;
+
 export class Psyche extends React.Component<Props> {
+  public componentDidMount() {
+    this.props.loadNotes();
+  }
   public render() {
     return (
       <div>
@@ -35,13 +45,16 @@ export class Psyche extends React.Component<Props> {
   }
 }
 
-const mapState = (state: any) => ({
+const mapState = (state: RootState): StateProps => ({
   notes: state.notes
 });
 
-const mapDispatch = (dispatch: any) => ({
-  addNote: dispatch.notes.add,
-  deleteNote: dispatch.notes.delete
+const mapDispatch: (dispatch: any) => DispatchProps = (
+  dispatch: Dispatch
+): DispatchProps => ({
+  addNote: dispatch.notes.createNote,
+  deleteNote: dispatch.notes.deleteNote,
+  loadNotes: dispatch.notes.loadNotes
 });
 
 export default connect(
