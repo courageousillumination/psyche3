@@ -5,9 +5,16 @@
 
 import React from "react";
 import ReactDom from "react-dom";
+import { Provider } from "react-redux";
 
 import Psyche from "psyche/components/psyche";
+import store from "psyche/store";
 
 const root = document.createElement("div");
 document.body.append(root);
-ReactDom.render(<Psyche />, root);
+ReactDom.render(
+  <Provider store={store}>
+    <Psyche />
+  </Provider>,
+  root
+);
