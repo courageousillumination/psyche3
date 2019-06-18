@@ -9,7 +9,9 @@ const NoteCard: React.FunctionComponent<Props> = ({ note, deleteNote }) => {
   return (
     <div>
       {note}
-      <button onClick={deleteNote}>Delete</button>
+      <button onClick={deleteNote} data-test="delete-note">
+        Delete
+      </button>
     </div>
   );
 };

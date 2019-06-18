@@ -23,7 +23,7 @@ describe("NoteCard", () => {
 
   describe("clicking the delete button", () => {
     it("should fire deleteNote", () => {
-      wrapper.find("button").simulate("click");
+      wrapper.find("[data-test='delete-note']").simulate("click");
       expect(deleteNoteSpy).to.have.been.called;
     });
   });

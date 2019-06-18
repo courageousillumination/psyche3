@@ -20,8 +20,19 @@ describe("note interactions", () => {
     it("should remove the note", () => {
       const wrapper = mount(<Psyche />);
       wrapper.setState({ notes: [NOTE_STRING] });
-      wrapper.find("button").simulate("click");
+      wrapper.find("[data-test='delete-note']").simulate("click");
       expect(wrapper).not.to.include.text(NOTE_STRING);
+    });
+  });
+
+  describe("importing", () => {
+    it("should import data", () => {
+      const wrapper = mount(<Psyche />);
+      wrapper.find("textarea").simulate("change", {
+        target: { value: JSON.stringify({ notes: [NOTE_STRING] }) }
+      });
+      wrapper.find("[data-test='import']").simulate("click");
+      expect(wrapper).to.include.text(NOTE_STRING);
     });
   });
 });
