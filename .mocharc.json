@@ -3,7 +3,8 @@
     "ts-node/register",
     "tsconfig-paths/register",
     "source-map-support/register",
-    "jsdom-global/register"
+    "jsdom-global/register",
+    "ignore-styles"
   ],
   "file": ["psyche/testing/setup-enzyme.ts ", "psyche/testing/setup-chai.ts"],
   "recursive": true

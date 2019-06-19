@@ -1,7 +1,9 @@
+import { init } from "@rematch/core";
 import { expect } from "chai";
 import { mount, ReactWrapper } from "enzyme";
 import Psyche from "psyche/components/psyche";
-import store from "psyche/store";
+import { Store } from "psyche/store";
+import * as models from "psyche/store/models";
 import React from "react";
 import { Provider } from "react-redux";
 
@@ -14,7 +16,9 @@ const storeSettled = async () => {
 
 describe("note interactions", () => {
   let wrapper: ReactWrapper;
+  let store: Store;
   beforeEach(() => {
+    store = init({ models });
     wrapper = mount(
       <Provider store={store}>
         <Psyche />
@@ -34,10 +38,13 @@ describe("note interactions", () => {
   });
 
   describe("deleting a note", () => {
-    it("should remove the note", async () => {
-      wrapper.setState({ notes: [NOTE_STRING] });
-      wrapper.find("[data-test='delete-note']").simulate("click");
+    beforeEach(async () => {
+      await store.dispatch.notes.createNote(NOTE_STRING);
+      wrapper.update();
+    });
 
+    it("should remove the note", async () => {
+      wrapper.find("[data-test='delete-note']").simulate("click");
       await storeSettled();
       expect(wrapper).not.to.include.text(NOTE_STRING);
     });

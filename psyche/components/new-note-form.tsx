@@ -1,5 +1,5 @@
+import * as styles from "psyche/styles/new-note-form.scss";
 import React from "react";
-import * as styles from "psyche/styles/new-note-form.css";
 
 export interface Props {
   createNote: (note: string) => void;
@@ -18,9 +18,10 @@ class NewNoteForm extends React.Component<Props, State> {
     return (
       <form onSubmit={this.handleSubmit}>
         <input
-          className={styles.bar}
+          className={styles.noteInput}
           value={this.state.note}
           onChange={this.handleInputChange}
+          placeholder="Say Something..."
           data-test="new-note-form.input"
         />
       </form>

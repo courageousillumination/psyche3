@@ -2,6 +2,7 @@ import ImportExportArea from "psyche/components/import-export-area";
 import NewNoteForm from "psyche/components/new-note-form";
 import NoteCard from "psyche/components/note-card";
 import { Dispatch, RootState } from "psyche/store";
+import * as styles from "psyche/styles/psyche.scss";
 import React from "react";
 import { connect } from "react-redux";
 
@@ -23,18 +24,20 @@ export class Psyche extends React.Component<Props> {
   }
   public render() {
     return (
-      <div>
-        <NewNoteForm createNote={this.props.addNote} />
-        <div data-test="all-notes">
-          {this.props.notes.map((note, i) => {
-            return (
-              <NoteCard
-                note={note}
-                key={i}
-                deleteNote={() => this.props.deleteNote(i)}
-              />
-            );
-          })}
+      <div className={styles.container}>
+        <div>
+          <NewNoteForm createNote={this.props.addNote} />
+          <div data-test="all-notes">
+            {this.props.notes.map((note, i) => {
+              return (
+                <NoteCard
+                  note={note}
+                  key={i}
+                  deleteNote={() => this.props.deleteNote(i)}
+                />
+              );
+            })}
+          </div>
         </div>
         <ImportExportArea
           notes={this.props.notes}

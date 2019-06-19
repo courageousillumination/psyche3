@@ -38,7 +38,7 @@ const notesModelConfig: ModelConfig<string[]> = {
   }),
   reducers: {
     add(state, note: string) {
-      return [...state, note];
+      return [note, ...state];
     },
     addNotes(state, allNotes: string[]) {
       return [...state, ...allNotes];

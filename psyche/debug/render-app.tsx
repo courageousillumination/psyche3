@@ -11,6 +11,7 @@ import Psyche from "psyche/components/psyche";
 import store from "psyche/store";
 
 const root = document.createElement("div");
+root.setAttribute("style", "height: 100%");
 document.body.append(root);
 ReactDom.render(
   <Provider store={store}>

@@ -1,3 +1,4 @@
+import * as styles from "psyche/styles/import-export-area.scss";
 import React from "react";
 
 export interface Props {
@@ -16,17 +17,24 @@ class ImportExportArea extends React.Component<Props, State> {
 
   public render() {
     return (
-      <div>
+      <div className={styles.container}>
         <textarea
+          className={styles.importTextArea}
           value={this.state.textAreaValue}
           onChange={this.handleTextAreaChange}
         />
-        <button onClick={this.handleImport} data-test="import">
-          Import
-        </button>
-        <button onClick={this.handleExport} data-test="export">
-          Export
-        </button>
+        <div className={styles.buttonContainer}>
+          <div>
+            <button onClick={this.handleImport} data-test="import">
+              Import
+            </button>
+          </div>
+          <div>
+            <button onClick={this.handleExport} data-test="export">
+              Export
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
