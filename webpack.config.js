@@ -3,10 +3,13 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./psyche/debug/render-app.tsx",
+  entry: {
+    psyche: "./psyche/debug/render-app.tsx",
+    worker: "./psyche/worker/index.ts"
+  },
   mode: "development",
   output: {
-    filename: "bundle.js"
+    filename: "[name]-bundle.js"
   },
   module: {
     rules: [
