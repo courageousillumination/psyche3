@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   entry: {
@@ -34,6 +35,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({ template: "./psyche/debug/template.html" }),
-    new MiniCssExtractPlugin()
+    new MiniCssExtractPlugin(),
+    new webpack.DefinePlugin({
+      USE_REST_BACKEND: JSON.stringify(!!process.env.PSYCHE_REST),
+      REST_BACKEND_HOST: JSON.stringify(
+        process.env.PSYCHE_REST_HOST || "http://localhost:8000/"
+      )
+    })
   ]
 };

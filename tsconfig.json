@@ -20,5 +20,5 @@
     /* Source Map Options */
     "sourceMap": true /* Generates corresponding '.map' file. */
   },
-  "include": ["psyche/**/*.ts", "psyche/**/*.tsx"]
+  "include": ["psyche/**/*.ts", "psyche/**/*.tsx", "psyche/**/*.d.ts"]
 }

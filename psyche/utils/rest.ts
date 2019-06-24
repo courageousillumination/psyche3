@@ -1,4 +1,5 @@
 /** Utilities for working with REST resources */
+import environment from "psyche/environment";
 
 const COMMON_FETCH_OPTIONS = {
   headers: {
@@ -6,7 +7,7 @@ const COMMON_FETCH_OPTIONS = {
   }
 };
 
-const API_ROOT = "http://localhost:8000/";
+const API_ROOT = environment.restBackendHost;
 
 class RestResource<T> {
   private resourceName: string;

@@ -1,5 +1,6 @@
 class Environment {
-  public useRestBackend: boolean = false;
+  public restBackendHost: string = REST_BACKEND_HOST;
+  public useRestBackend: boolean = USE_REST_BACKEND;
 }
 
 const env = new Environment();
