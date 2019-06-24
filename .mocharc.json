@@ -6,6 +6,10 @@
     "jsdom-global/register",
     "ignore-styles"
   ],
-  "file": ["psyche/testing/setup-enzyme.ts ", "psyche/testing/setup-chai.ts"],
+  "file": [
+    "psyche/testing/setup-enzyme.ts ",
+    "psyche/testing/setup-chai.ts",
+    "psyche/testing/setup-environment.ts"
+  ],
   "recursive": true
 }

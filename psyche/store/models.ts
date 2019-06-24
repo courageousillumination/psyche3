@@ -1,67 +1,75 @@
 import { createModel, ModelConfig } from "@rematch/core";
-import { request } from "graphql-request";
-
-// Note serialization is done through local storage. If it fails we
-// continue on with best effort.
-
-// const serializeNotes = (allNotes: string[]) => {
-//   try {
-//     if (window.localStorage) {
-//       window.localStorage.setItem("notes", JSON.stringify(allNotes));
-//     }
-//     // tslint:disable-next-line: no-empty
-//   } catch (e) {}
-// };
-
-// const deserializeNotes = (): string[] => {
-//   try {
-//     return JSON.parse(window.localStorage.getItem("notes") || "[]");
-//   } catch (e) {
-//     return [];
-//   }
-// };
+import environment from "psyche/environment";
+import { resource } from "psyche/utils/rest";
 
 export interface Note {
   note: string;
   id: number;
 }
 
-const GRAPHQL_URL = "http://localhost:4000/graphql";
+interface Backend {
+  getAll(): Promise<Note[]>;
+  create(note: string): Promise<Note>;
+  delete(noteId: number): Promise<void>;
+}
+
+const saveToLocalStorage = (notes: Note[]) => {
+  try {
+    window.localStorage.setItem("notes", JSON.stringify(notes));
+    // tslint:disable-next-line: no-empty
+  } catch (e) {}
+};
+
+const LocalBackend: Backend = {
+  async getAll() {
+    try {
+      return JSON.parse(window.localStorage.getItem("notes") || "[]");
+    } catch (e) {
+      return [];
+    }
+  },
+  async create(note: string) {
+    const allNotes = await this.getAll();
+    const maxId = allNotes.length ? Math.max(...allNotes.map(x => x.id)) : 0;
+    const newNote = { note, id: maxId + 1 };
+    saveToLocalStorage([...allNotes, newNote]);
+    return newNote;
+  },
+  async delete(noteId: number) {
+    const allNotes = await this.getAll();
+    saveToLocalStorage(allNotes.filter(note => note.id !== noteId));
+  }
+};
+
+const RestBackend: Backend = {
+  getAll() {
+    return resource<Note>("notes").getAll();
+  },
+  create(note: string) {
+    return resource<Note>("notes").create({ note });
+  },
+  delete(noteId: number) {
+    return resource<Note>("notes").delete(noteId);
+  }
+};
+
+const getBackend = (): Backend => {
+  return environment.useRestBackend ? RestBackend : LocalBackend;
+};
 
 const notesModelConfig: ModelConfig<Note[]> = {
   effects: dispatch => ({
-    async createNote(note: string, rootState) {
-      const response = await request(
-        GRAPHQL_URL,
-        `mutation {
-        createNote(note: "${note}") {
-          note,
-          id
-        }
-      }`
-      );
-      dispatch.notes.add(response.createNote);
+    async createNote(note: string) {
+      const newNote = await getBackend().create(note);
+      dispatch.notes.add(newNote);
     },
-    async deleteNote(noteId: number, rootState) {
-      await request(
-        GRAPHQL_URL,
-        `mutation {
-            deleteNote(id: ${noteId})
-          }`
-      );
+    async deleteNote(noteId: number) {
+      await getBackend().delete(noteId);
       dispatch.notes.remove(noteId);
     },
     async loadNotes() {
-      const data = await request(
-        GRAPHQL_URL,
-        `{
-          notes {
-            note,
-            id
-          }
-        }`
-      );
-      dispatch.notes.addNotes(data.notes);
+      const allNotes = await getBackend().getAll();
+      dispatch.notes.addNotes(allNotes);
     }
   }),
   reducers: {

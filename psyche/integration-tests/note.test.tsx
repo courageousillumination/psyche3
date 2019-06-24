@@ -10,8 +10,10 @@ import { Provider } from "react-redux";
 const NOTE_STRING = "NEW NOTE!";
 
 const storeSettled = async () => {
-  // The store effects run async so we need to wait at least one event loop.
-  await Promise.resolve();
+  // The store effects run async so we just wait a bit for things to settle.
+  return new Promise(resolve => {
+    setTimeout(resolve, 50);
+  });
 };
 
 describe("note interactions", () => {
