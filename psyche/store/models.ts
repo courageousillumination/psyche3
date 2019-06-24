@@ -1,50 +1,78 @@
 import { createModel, ModelConfig } from "@rematch/core";
+import { request } from "graphql-request";
 
 // Note serialization is done through local storage. If it fails we
 // continue on with best effort.
 
-const serializeNotes = (allNotes: string[]) => {
-  try {
-    if (window.localStorage) {
-      window.localStorage.setItem("notes", JSON.stringify(allNotes));
-    }
-    // tslint:disable-next-line: no-empty
-  } catch (e) {}
-};
+// const serializeNotes = (allNotes: string[]) => {
+//   try {
+//     if (window.localStorage) {
+//       window.localStorage.setItem("notes", JSON.stringify(allNotes));
+//     }
+//     // tslint:disable-next-line: no-empty
+//   } catch (e) {}
+// };
 
-const deserializeNotes = (): string[] => {
-  try {
-    return JSON.parse(window.localStorage.getItem("notes") || "[]");
-  } catch (e) {
-    return [];
-  }
-};
+// const deserializeNotes = (): string[] => {
+//   try {
+//     return JSON.parse(window.localStorage.getItem("notes") || "[]");
+//   } catch (e) {
+//     return [];
+//   }
+// };
 
-const notesModelConfig: ModelConfig<string[]> = {
+export interface Note {
+  note: string;
+  id: number;
+}
+
+const GRAPHQL_URL = "http://localhost:4000/graphql";
+
+const notesModelConfig: ModelConfig<Note[]> = {
   effects: dispatch => ({
-    createNote(note: string, rootState) {
-      serializeNotes([...rootState.notes, note]);
-      dispatch.notes.add(note);
+    async createNote(note: string, rootState) {
+      const response = await request(
+        GRAPHQL_URL,
+        `mutation {
+        createNote(note: "${note}") {
+          note,
+          id
+        }
+      }`
+      );
+      dispatch.notes.add(response.createNote);
     },
-    deleteNote(noteId: number, rootState) {
-      serializeNotes(
-        rootState.notes.filter((_: string, i: number) => i !== noteId)
+    async deleteNote(noteId: number, rootState) {
+      await request(
+        GRAPHQL_URL,
+        `mutation {
+            deleteNote(id: ${noteId})
+          }`
       );
       dispatch.notes.remove(noteId);
     },
-    loadNotes() {
-      dispatch.notes.addNotes(deserializeNotes());
+    async loadNotes() {
+      const data = await request(
+        GRAPHQL_URL,
+        `{
+          notes {
+            note,
+            id
+          }
+        }`
+      );
+      dispatch.notes.addNotes(data.notes);
     }
   }),
   reducers: {
-    add(state, note: string) {
+    add(state, note: Note) {
       return [note, ...state];
     },
-    addNotes(state, allNotes: string[]) {
+    addNotes(state, allNotes: Note[]) {
       return [...state, ...allNotes];
     },
-    remove(state: string[], noteId: number) {
-      return state.filter((_, i) => i !== noteId);
+    remove(state: Note[], noteId: number) {
+      return state.filter(note => note.id !== noteId);
     }
   },
   state: []

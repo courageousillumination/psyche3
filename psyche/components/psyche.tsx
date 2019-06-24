@@ -5,6 +5,7 @@ import { Dispatch, RootState } from "psyche/store";
 import * as styles from "psyche/styles/psyche.scss";
 import React from "react";
 import { connect } from "react-redux";
+import { Note } from "psyche/store/models";
 
 interface DispatchProps {
   addNote: (note: string) => void;
@@ -13,7 +14,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  notes: string[];
+  notes: Note[];
 }
 
 export type Props = DispatchProps & StateProps;
@@ -31,16 +32,16 @@ export class Psyche extends React.Component<Props> {
             {this.props.notes.map((note, i) => {
               return (
                 <NoteCard
-                  note={note}
+                  note={note.note}
                   key={i}
-                  deleteNote={() => this.props.deleteNote(i)}
+                  deleteNote={() => this.props.deleteNote(note.id)}
                 />
               );
             })}
           </div>
         </div>
         <ImportExportArea
-          notes={this.props.notes}
+          notes={this.props.notes.map(x => x.note)}
           setNotes={notes => notes.map(this.props.addNote)}
         />
       </div>
