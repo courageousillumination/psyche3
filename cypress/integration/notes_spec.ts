@@ -23,7 +23,7 @@ describe("notes", () => {
 
   describe("import and export", () => {
     const NOTE_STRING = "foobar";
-    const NEW_DATA = '{{}"notes": ["foobaz"]}';
+    const NEW_DATA = '{{}"notes": [{{}"id": 1, "note": "foobaz"}]}';
     beforeEach(() => {
       cy.visit("/");
       createNote(NOTE_STRING);
