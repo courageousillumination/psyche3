@@ -11,7 +11,7 @@ export interface Props {
 const NoteCard: React.FunctionComponent<Props> = ({ note, deleteNote }) => {
   return (
     <div className={styles.container}>
-      <div className={styles.noteText}>{note.note}</div>
+      <div className={styles.noteText}>{note.title}</div>
       <div data-test="delete-note" onClick={deleteNote}>
         <FaTrash className={styles.deleteButton} />
       </div>

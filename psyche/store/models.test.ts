@@ -17,7 +17,7 @@ describe("models", () => {
       });
 
       it("should remove a note", () => {
-        const state = reducers.remove([{ id: 0, note: "note" }], 0);
+        const state = reducers.remove([{ id: 0, title: "note" }], 0);
         expect(state).to.deep.equal([]);
       });
 

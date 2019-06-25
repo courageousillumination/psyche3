@@ -18,7 +18,7 @@ describe("NoteCard", () => {
 
   describe("structure", () => {
     it("should include the text of the note", () => {
-      expect(wrapper).to.include.text(SIMPLE_NOTE.note);
+      expect(wrapper).to.include.text(SIMPLE_NOTE.title);
     });
   });
 

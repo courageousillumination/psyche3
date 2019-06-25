@@ -6,6 +6,7 @@ import * as styles from "psyche/styles/psyche.scss";
 import { Note } from "psyche/types/models";
 import React from "react";
 import { connect } from "react-redux";
+import FullNoteForm from "psyche/components/full-note-form";
 
 interface DispatchProps {
   addNote: (note: Note) => void;
@@ -28,8 +29,9 @@ export class Psyche extends React.Component<Props> {
       <div className={styles.container}>
         <div>
           <NewNoteForm
-            createNote={note => this.props.addNote({ note, id: -1 })}
+            createNote={note => this.props.addNote({ title: note, id: -1 })}
           />
+          <FullNoteForm createNote={this.props.addNote} />
           <div data-test="all-notes">
             {this.props.notes.map((note, i) => {
               return (
