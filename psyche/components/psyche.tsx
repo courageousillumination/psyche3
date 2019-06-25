@@ -1,3 +1,4 @@
+import FullNoteForm from "psyche/components/full-note-form";
 import ImportExportArea from "psyche/components/import-export-area";
 import NewNoteForm from "psyche/components/new-note-form";
 import NoteCard from "psyche/components/note-card";
@@ -6,7 +7,6 @@ import * as styles from "psyche/styles/psyche.scss";
 import { Note } from "psyche/types/models";
 import React from "react";
 import { connect } from "react-redux";
-import FullNoteForm from "psyche/components/full-note-form";
 
 interface DispatchProps {
   addNote: (note: Note) => void;
@@ -20,7 +20,18 @@ interface StateProps {
 
 export type Props = DispatchProps & StateProps;
 
-export class Psyche extends React.Component<Props> {
+export interface State {
+  selectedNote?: Note;
+}
+
+export class Psyche extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      selectedNote: undefined
+    };
+  }
+
   public componentDidMount() {
     this.props.loadNotes();
   }
@@ -31,11 +42,17 @@ export class Psyche extends React.Component<Props> {
           <NewNoteForm
             createNote={note => this.props.addNote({ title: note, id: -1 })}
           />
-          <FullNoteForm createNote={this.props.addNote} />
+          <FullNoteForm
+            createNote={this.props.addNote}
+            note={this.state.selectedNote}
+          />
           <div data-test="all-notes">
             {this.props.notes.map((note, i) => {
               return (
                 <NoteCard
+                  onClick={() => {
+                    this.setState({ selectedNote: note });
+                  }}
                   note={note}
                   key={i}
                   deleteNote={() => this.props.deleteNote(note.id)}
