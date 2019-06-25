@@ -1,74 +1,28 @@
 import { createModel, ModelConfig } from "@rematch/core";
 import environment from "psyche/environment";
-import { resource } from "psyche/utils/rest";
+import Backend from "psyche/store/backends/backend";
+import LocalStorageBackend from "psyche/store/backends/local-storage-backend";
+import RestBackend from "psyche/store/backends/rest-backend";
+import { Note } from "psyche/types/models";
 
-export interface Note {
-  note: string;
-  id: number;
+function getBackend<T>(resourceName: string): Backend<T> {
+  return environment.useRestBackend
+    ? new RestBackend<T>(resourceName)
+    : new LocalStorageBackend<T>(resourceName);
 }
-
-interface Backend {
-  getAll(): Promise<Note[]>;
-  create(note: string): Promise<Note>;
-  delete(noteId: number): Promise<void>;
-}
-
-const saveToLocalStorage = (notes: Note[]) => {
-  try {
-    window.localStorage.setItem("notes", JSON.stringify(notes));
-    // tslint:disable-next-line: no-empty
-  } catch (e) {}
-};
-
-const LocalBackend: Backend = {
-  async getAll() {
-    try {
-      return JSON.parse(window.localStorage.getItem("notes") || "[]");
-    } catch (e) {
-      return [];
-    }
-  },
-  async create(note: string) {
-    const allNotes = await this.getAll();
-    const maxId = allNotes.length ? Math.max(...allNotes.map(x => x.id)) : 0;
-    const newNote = { note, id: maxId + 1 };
-    saveToLocalStorage([...allNotes, newNote]);
-    return newNote;
-  },
-  async delete(noteId: number) {
-    const allNotes = await this.getAll();
-    saveToLocalStorage(allNotes.filter(note => note.id !== noteId));
-  }
-};
-
-const RestBackend: Backend = {
-  getAll() {
-    return resource<Note>("notes").getAll();
-  },
-  create(note: string) {
-    return resource<Note>("notes").create({ note });
-  },
-  delete(noteId: number) {
-    return resource<Note>("notes").delete(noteId);
-  }
-};
-
-const getBackend = (): Backend => {
-  return environment.useRestBackend ? RestBackend : LocalBackend;
-};
 
 const notesModelConfig: ModelConfig<Note[]> = {
   effects: dispatch => ({
-    async createNote(note: string) {
-      const newNote = await getBackend().create(note);
+    async createNote(note: Note) {
+      const newNote = await getBackend<Note>("notes").create(note);
       dispatch.notes.add(newNote);
     },
     async deleteNote(noteId: number) {
-      await getBackend().delete(noteId);
+      await getBackend<Note>("notes").delete(noteId);
       dispatch.notes.remove(noteId);
     },
     async loadNotes() {
-      const allNotes = await getBackend().getAll();
+      const allNotes = await getBackend<Note>("notes").getAll();
       dispatch.notes.addNotes(allNotes);
     }
   }),

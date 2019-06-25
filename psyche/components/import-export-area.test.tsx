@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { shallow, ShallowWrapper } from "enzyme";
+import { NOTES_LIST } from "psyche/testing/testing-data";
 import React from "react";
 import sinon from "sinon";
 import ImportExportArea from "./import-export-area";
@@ -7,13 +8,11 @@ import ImportExportArea from "./import-export-area";
 describe("ImportExportArea", () => {
   let wrapper: ShallowWrapper;
   let setNotesSpy: sinon.SinonSpy;
-  let notes: string[];
 
   beforeEach(() => {
-    notes = ["foo", "bar"];
     setNotesSpy = sinon.spy();
     wrapper = shallow(
-      <ImportExportArea setNotes={setNotesSpy} notes={notes} />
+      <ImportExportArea setNotes={setNotesSpy} notes={NOTES_LIST} />
     );
   });
 
@@ -35,16 +34,18 @@ describe("ImportExportArea", () => {
     it("should serialize and display the data", () => {
       wrapper.find("[data-test='export']").simulate("click");
       expect(wrapper.state("textAreaValue")).to.equal(
-        JSON.stringify({ notes })
+        JSON.stringify({ notes: NOTES_LIST })
       );
     });
   });
 
   describe("importing", () => {
     it("should call setNotes", () => {
-      wrapper.setState({ textAreaValue: JSON.stringify({ notes }) });
+      wrapper.setState({
+        textAreaValue: JSON.stringify({ notes: NOTES_LIST })
+      });
       wrapper.find("[data-test='import']").simulate("click");
-      expect(setNotesSpy).to.have.been.calledWith(notes);
+      expect(setNotesSpy).to.have.been.calledWith(NOTES_LIST);
     });
   });
 });

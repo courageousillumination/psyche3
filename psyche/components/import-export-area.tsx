@@ -1,9 +1,10 @@
 import * as styles from "psyche/styles/import-export-area.scss";
+import { Note } from "psyche/types/models";
 import React from "react";
 
 export interface Props {
-  notes: string[];
-  setNotes: (notes: string[]) => void;
+  notes: Note[];
+  setNotes: (notes: Note[]) => void;
 }
 
 export interface State {

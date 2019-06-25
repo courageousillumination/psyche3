@@ -1,6 +1,7 @@
 import { ModelReducers } from "@rematch/core";
 import { expect } from "chai";
-import { notes, Note } from "psyche/store/models";
+import { notes } from "psyche/store/models";
+import { Note } from "psyche/types/models";
 
 describe("models", () => {
   describe("notes", () => {

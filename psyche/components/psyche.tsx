@@ -3,12 +3,12 @@ import NewNoteForm from "psyche/components/new-note-form";
 import NoteCard from "psyche/components/note-card";
 import { Dispatch, RootState } from "psyche/store";
 import * as styles from "psyche/styles/psyche.scss";
+import { Note } from "psyche/types/models";
 import React from "react";
 import { connect } from "react-redux";
-import { Note } from "psyche/store/models";
 
 interface DispatchProps {
-  addNote: (note: string) => void;
+  addNote: (note: Note) => void;
   deleteNote: (noteId: number) => void;
   loadNotes: () => void;
 }
@@ -27,12 +27,14 @@ export class Psyche extends React.Component<Props> {
     return (
       <div className={styles.container}>
         <div>
-          <NewNoteForm createNote={this.props.addNote} />
+          <NewNoteForm
+            createNote={note => this.props.addNote({ note, id: -1 })}
+          />
           <div data-test="all-notes">
             {this.props.notes.map((note, i) => {
               return (
                 <NoteCard
-                  note={note.note}
+                  note={note}
                   key={i}
                   deleteNote={() => this.props.deleteNote(note.id)}
                 />
@@ -41,7 +43,7 @@ export class Psyche extends React.Component<Props> {
           </div>
         </div>
         <ImportExportArea
-          notes={this.props.notes.map(x => x.note)}
+          notes={this.props.notes}
           setNotes={notes => notes.map(this.props.addNote)}
         />
       </div>

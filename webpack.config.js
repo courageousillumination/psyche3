@@ -37,8 +37,8 @@ module.exports = {
     new HtmlWebpackPlugin({ template: "./psyche/debug/template.html" }),
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
-      USE_REST_BACKEND: JSON.stringify(!!process.env.PSYCHE_REST),
-      REST_BACKEND_HOST: JSON.stringify(
+      "process.env.USE_REST_BACKEND": JSON.stringify(!!process.env.PSYCHE_REST),
+      "process.env.REST_BACKEND_HOST": JSON.stringify(
         process.env.PSYCHE_REST_HOST || "http://localhost:8000/"
       )
     })
