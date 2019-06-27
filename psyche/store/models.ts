@@ -21,6 +21,11 @@ const notesModelConfig: ModelConfig<Note[]> = {
       await getBackend<Note>("notes").delete(noteId);
       dispatch.notes.remove(noteId);
     },
+    async updateNote(note: Partial<Note>) {
+      const updated = await getBackend<Note>("notes").update(note);
+      dispatch.notes.update(updated);
+    },
+
     async loadNotes() {
       const allNotes = await getBackend<Note>("notes").getAll();
       dispatch.notes.addNotes(allNotes);
@@ -32,6 +37,14 @@ const notesModelConfig: ModelConfig<Note[]> = {
     },
     addNotes(state, allNotes: Note[]) {
       return [...state, ...allNotes];
+    },
+    update(state, note: Note) {
+      const index = state.findIndex(x => x.id === note.id);
+      const newState = [...state];
+      if (index > -1) {
+        newState[index] = note;
+      }
+      return newState;
     },
     remove(state: Note[], noteId: number) {
       return state.filter(note => note.id !== noteId);

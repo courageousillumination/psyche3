@@ -24,6 +24,22 @@ class LocalStorageBackend<T> implements Backend<T> {
     return newItem;
   }
 
+  public async update(item: Partial<T>) {
+    const allItems = await this.getAll();
+    const currentIndex = allItems.findIndex(
+      x => (x as any).id === (item as any).id
+    );
+    if (currentIndex < 0) {
+      throw new Error("Could not find item to update.");
+    }
+    const current = allItems[currentIndex];
+    const updated = { ...current, ...item };
+    const updatedItems = [...allItems];
+    updatedItems[currentIndex] = updated;
+    this.saveToLocalStorage(updatedItems);
+    return updated;
+  }
+
   public async delete(id: number) {
     const allItems = await this.getAll();
     this.saveToLocalStorage(allItems.filter((item: any) => item.id !== id));

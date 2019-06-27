@@ -13,6 +13,9 @@ class RestBackend<T> implements Backend<T> {
   public async create(item: T) {
     return resource<T>(this.resourceName).create(item);
   }
+  public async update(item: Partial<T>) {
+    return resource<T>(this.resourceName).update(item);
+  }
   public async delete(id: number) {
     return resource<T>(this.resourceName).delete(id);
   }

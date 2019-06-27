@@ -30,6 +30,15 @@ class RestResource<T> {
     return await response.json();
   }
 
+  public async update(item: Partial<T>): Promise<T> {
+    const response = await fetch(this.getResourceUrl((item as any).id), {
+      ...COMMON_FETCH_OPTIONS,
+      body: JSON.stringify(item),
+      method: "PATCH"
+    });
+    return await response.json();
+  }
+
   public async delete(id: number): Promise<void> {
     await fetch(this.getResourceUrl(id), {
       ...COMMON_FETCH_OPTIONS,
