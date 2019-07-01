@@ -1,3 +1,4 @@
+import { History } from "history";
 import { Dispatch, RootState } from "psyche/store";
 import * as styles from "psyche/styles/note-details/root.scss";
 import { Note } from "psyche/types/models";
@@ -5,7 +6,7 @@ import React from "react";
 import { Field, Form } from "react-final-form";
 import ReactMarkdown from "react-markdown";
 import { connect } from "react-redux";
-import { History } from "history";
+import { Link } from "react-router-dom";
 
 export interface DispatchProps {
   updateNote: (note: Partial<Note>) => void;
@@ -107,6 +108,20 @@ class NoteDetails extends React.Component<Props, State> {
       <div className={styles.formContainer}>
         <h1>{note.title}</h1>
         <ReactMarkdown source={note.body} />
+        <div>
+          Children:
+          {note.children
+            ? note.children.map(childId => {
+                const child = this.props.notes.find(n => n.id === childId);
+
+                return child ? (
+                  <div key={childId}>
+                    <Link to={`/note/${child.id}/`}>{child.title}</Link>
+                  </div>
+                ) : null;
+              })
+            : null}
+        </div>
         <button onClick={() => this.setState({ isEditing: true })}>Edit</button>
         <button onClick={() => this.duplicateNote()}>Duplicate</button>
       </div>
@@ -122,10 +137,17 @@ class NoteDetails extends React.Component<Props, State> {
       return;
     }
     const newNote = (await this.props.createNote({
-      ...note,
-      title: `${note.title} (Copy)`,
-      id: -1
+      body: note.body,
+      id: -1,
+      title: `${note.title} (Copy)`
     })) as any;
+    // Update the children
+    const currentChildren = note.children || [];
+    this.props.updateNote({
+      children: [...currentChildren, newNote.id],
+      id: note.id
+    });
+
     this.props.history.push(`/note/${newNote.id}/`);
   };
 }
