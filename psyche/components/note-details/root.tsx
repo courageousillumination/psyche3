@@ -78,6 +78,7 @@ class NoteDetails extends React.Component<Props, State> {
                     name="title"
                     component="input"
                     className={styles.titleInput}
+                    autocomplete="off"
                   />
                 </div>
                 <div>

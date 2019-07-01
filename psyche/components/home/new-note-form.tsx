@@ -31,6 +31,7 @@ const NewNoteForm: React.FunctionComponent<Props> = ({ createNote }) => {
               component="input"
               placeholder="Say Something..."
               data-test="new-note-form.input"
+              autoComplete="off"
             />
           </form>
         );
