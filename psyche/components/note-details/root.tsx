@@ -1,8 +1,9 @@
-import { RootState, Dispatch } from "psyche/store";
+import { Dispatch, RootState } from "psyche/store";
+import * as styles from "psyche/styles/note-details/root.scss";
 import { Note } from "psyche/types/models";
 import React from "react";
+import { Field, Form } from "react-final-form";
 import { connect } from "react-redux";
-import { Form, Field } from "react-final-form";
 
 export interface DispatchProps {
   updateNote: (note: Partial<Note>) => void;
@@ -34,23 +35,41 @@ export const NoteDetails: React.FunctionComponent<Props> = ({
     return <div>Loading...</div>;
   }
   return (
-    <div>
-      <Form
-        onSubmit={data => updateNote({ ...data, id: note.id })}
-        render={({ handleSubmit }) => {
-          return (
-            <form onSubmit={handleSubmit}>
-              <Field name="title" defaultValue={note.title} component="input" />
-              <Field
-                name="body"
-                defaultValue={note.body}
-                component="textarea"
-              />
-              <button type="submit">Save</button>
-            </form>
-          );
-        }}
-      />
+    <div className={styles.container}>
+      <div className={styles.formContainer}>
+        <Form
+          onSubmit={data => updateNote({ ...data, id: note.id })}
+          initialValues={{
+            body: note.body,
+            title: note.title
+          }}
+          render={({ handleSubmit, pristine }) => {
+            return (
+              <form onSubmit={handleSubmit}>
+                <div>
+                  <Field
+                    name="title"
+                    component="input"
+                    className={styles.titleInput}
+                  />
+                </div>
+                <div>
+                  <Field
+                    name="body"
+                    component="textarea"
+                    className={styles.bodyTextarea}
+                  />
+                </div>
+                <div>
+                  <button type="submit" disabled={pristine}>
+                    Save
+                  </button>
+                </div>
+              </form>
+            );
+          }}
+        />
+      </div>
     </div>
   );
 };
