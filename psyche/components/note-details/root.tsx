@@ -5,9 +5,11 @@ import React from "react";
 import { Field, Form } from "react-final-form";
 import ReactMarkdown from "react-markdown";
 import { connect } from "react-redux";
+import { History } from "history";
 
 export interface DispatchProps {
   updateNote: (note: Partial<Note>) => void;
+  createNote: (note: Note) => void;
 }
 
 export interface StateProps {
@@ -16,6 +18,7 @@ export interface StateProps {
 
 export interface OwnProps {
   match: any;
+  history: History;
 }
 
 export type Props = StateProps & DispatchProps & OwnProps;
@@ -53,7 +56,7 @@ class NoteDetails extends React.Component<Props, State> {
     );
   }
 
-  private renderForm(note: Note) {
+  private renderForm = (note: Note) => {
     const { updateNote } = this.props;
     return (
       <div className={styles.formContainer}>
@@ -78,7 +81,7 @@ class NoteDetails extends React.Component<Props, State> {
                     name="title"
                     component="input"
                     className={styles.titleInput}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
                 <div>
@@ -97,17 +100,34 @@ class NoteDetails extends React.Component<Props, State> {
         />
       </div>
     );
-  }
+  };
 
-  private renderDisplay(note: Note) {
+  private renderDisplay = (note: Note) => {
     return (
       <div className={styles.formContainer}>
         <h1>{note.title}</h1>
         <ReactMarkdown source={note.body} />
         <button onClick={() => this.setState({ isEditing: true })}>Edit</button>
+        <button onClick={() => this.duplicateNote()}>Duplicate</button>
       </div>
     );
-  }
+  };
+
+  // Creates a copy using this note as a template.
+  private duplicateNote = async () => {
+    const note = this.props.notes.find(
+      x => x.id === +this.props.match.params.id
+    );
+    if (!note) {
+      return;
+    }
+    const newNote = (await this.props.createNote({
+      ...note,
+      title: `${note.title} (Copy)`,
+      id: -1
+    })) as any;
+    this.props.history.push(`/note/${newNote.id}/`);
+  };
 }
 
 const mapState = (state: RootState): StateProps => ({
@@ -117,6 +137,7 @@ const mapState = (state: RootState): StateProps => ({
 const mapDispatch: (dispatch: any) => DispatchProps = (
   dispatch: Dispatch
 ): DispatchProps => ({
+  createNote: dispatch.notes.createNote,
   updateNote: dispatch.notes.updateNote
 });
 

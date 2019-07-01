@@ -21,6 +21,7 @@ const notesModelConfig: ModelConfig<NotesModel> = {
     async createNote(note: Note) {
       const newNote = await getBackend<Note>("notes").create(note);
       dispatch.notes.add(newNote);
+      return newNote;
     },
     async deleteNote(noteId: number) {
       await getBackend<Note>("notes").delete(noteId);
