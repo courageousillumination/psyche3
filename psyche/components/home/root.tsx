@@ -13,6 +13,7 @@ export interface DispatchProps {
 
 export interface StateProps {
   notes: Note[];
+  isLoading: boolean;
 }
 
 export interface OwnProps {
@@ -30,16 +31,21 @@ export const Home: React.FunctionComponent<Props> = ({
   createNote,
   deleteNote,
   notes,
+  isLoading,
   history
 }) => {
   return (
     <div>
       <NewNoteForm createNote={createNote} />
-      <NotesDisplay
-        notes={notes}
-        deleteNote={deleteNote}
-        goToNote={(id: number) => history.push(`/note/${id}`)}
-      />
+      {isLoading && !notes.length ? (
+        <div>Loading...</div>
+      ) : (
+        <NotesDisplay
+          notes={notes}
+          deleteNote={deleteNote}
+          goToNote={(id: number) => history.push(`/note/${id}`)}
+        />
+      )}
     </div>
   );
 };
@@ -52,7 +58,8 @@ const mapDispatch: (dispatch: any) => DispatchProps = (
 });
 
 const mapState = (state: RootState): StateProps => ({
-  notes: state.notes
+  isLoading: state.notes.isLoading,
+  notes: state.notes.notes
 });
 
 export default connect(

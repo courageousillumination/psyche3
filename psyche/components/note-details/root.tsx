@@ -59,7 +59,11 @@ class NoteDetails extends React.Component<Props, State> {
       <div className={styles.formContainer}>
         <Form
           onSubmit={data => {
-            updateNote({ ...data, id: note.id });
+            updateNote({
+              body: data.body || "",
+              id: note.id,
+              title: data.title
+            });
             this.setState({ isEditing: false });
           }}
           initialValues={{
@@ -106,7 +110,7 @@ class NoteDetails extends React.Component<Props, State> {
 }
 
 const mapState = (state: RootState): StateProps => ({
-  notes: state.notes
+  notes: state.notes.notes
 });
 
 const mapDispatch: (dispatch: any) => DispatchProps = (

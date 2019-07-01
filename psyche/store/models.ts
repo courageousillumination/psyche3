@@ -11,7 +11,12 @@ function getBackend<T>(resourceName: string): Backend<T> {
     : new LocalStorageBackend<T>(resourceName);
 }
 
-const notesModelConfig: ModelConfig<Note[]> = {
+export interface NotesModel {
+  notes: Note[];
+  isLoading: boolean;
+}
+
+const notesModelConfig: ModelConfig<NotesModel> = {
   effects: dispatch => ({
     async createNote(note: Note) {
       const newNote = await getBackend<Note>("notes").create(note);
@@ -27,30 +32,53 @@ const notesModelConfig: ModelConfig<Note[]> = {
     },
 
     async loadNotes() {
+      dispatch.notes.setIsLoading(true);
       const allNotes = await getBackend<Note>("notes").getAll();
       dispatch.notes.addNotes(allNotes);
+      dispatch.notes.setIsLoading(false);
     }
   }),
   reducers: {
     add(state, note: Note) {
-      return [note, ...state];
+      return {
+        ...state,
+        notes: [...state.notes, note]
+      };
     },
     addNotes(state, allNotes: Note[]) {
-      return [...state, ...allNotes];
+      return {
+        ...state,
+        notes: [...state.notes, ...allNotes]
+      };
     },
     update(state, note: Note) {
-      const index = state.findIndex(x => x.id === note.id);
-      const newState = [...state];
+      const index = state.notes.findIndex(x => x.id === note.id);
+      const newNotes = [...state.notes];
       if (index > -1) {
-        newState[index] = note;
+        newNotes[index] = note;
       }
-      return newState;
+      return {
+        ...state,
+        notes: newNotes
+      };
     },
-    remove(state: Note[], noteId: number) {
-      return state.filter(note => note.id !== noteId);
+    remove(state, noteId: number) {
+      return {
+        ...state,
+        notes: state.notes.filter(note => note.id !== noteId)
+      };
+    },
+    setIsLoading(state, isLoading: boolean) {
+      return {
+        ...state,
+        isLoading
+      };
     }
   },
-  state: []
+  state: {
+    isLoading: false,
+    notes: []
+  }
 };
 
 export const notes = createModel(notesModelConfig);
