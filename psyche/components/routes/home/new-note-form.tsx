@@ -1,7 +1,9 @@
-import * as styles from "psyche/styles/new-note-form.scss";
-import { Note } from "psyche/types/models";
 import React from "react";
 import { Field, Form } from "react-final-form";
+
+import { Note } from "psyche/types/models";
+
+import * as styles from "psyche/styles/new-note-form.scss";
 
 export interface Props {
   createNote: (note: Note) => void;

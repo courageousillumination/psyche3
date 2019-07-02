@@ -1,10 +1,12 @@
 import { History } from "history";
-import NewNoteForm from "psyche/components/home/new-note-form";
-import NotesDisplay from "psyche/components/home/notes-display";
-import { Dispatch, RootState } from "psyche/store";
-import { Note } from "psyche/types/models";
 import React from "react";
 import { connect } from "react-redux";
+
+import NewNoteForm from "psyche/components/routes/home/new-note-form";
+import NotesDisplay from "psyche/components/routes/home/notes-display";
+import LoadingIndicator from "psyche/components/shared/loading-indicator";
+import { Dispatch, RootState } from "psyche/store";
+import { Note } from "psyche/types/models";
 
 export interface DispatchProps {
   createNote: (note: Note) => void;
@@ -38,13 +40,9 @@ export const Home: React.FunctionComponent<Props> = ({
     <div>
       <NewNoteForm createNote={createNote} />
       {isLoading && !notes.length ? (
-        <div>Loading...</div>
+        <LoadingIndicator />
       ) : (
-        <NotesDisplay
-          notes={notes}
-          deleteNote={deleteNote}
-          goToNote={(id: number) => history.push(`/note/${id}`)}
-        />
+        <NotesDisplay notes={notes} history={history} />
       )}
     </div>
   );

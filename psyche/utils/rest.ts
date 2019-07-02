@@ -7,6 +7,24 @@ const COMMON_FETCH_OPTIONS = {
   }
 };
 
+/**
+ * Maps any remote field names that may be different from local fields.
+ * The first entry in the tuple is the remote, and the second is the local.
+ */
+const FIELD_MAP = [{ remote: "note_type", local: "noteType" }];
+
+const applyFieldMap = (obj: any, outbound = false) => {
+  const modifiedObj = { ...obj };
+  for (const { remote, local } of FIELD_MAP) {
+    const [source, dest] = outbound ? [local, remote] : [remote, local];
+    if (modifiedObj[source] !== undefined) {
+      modifiedObj[dest] = modifiedObj[source];
+      delete modifiedObj[source];
+    }
+  }
+  return modifiedObj;
+};
+
 const API_ROOT = environment.restBackendHost;
 
 class RestResource<T> {
@@ -19,24 +37,24 @@ class RestResource<T> {
   public async create(item: any): Promise<T> {
     const response = await fetch(this.getResourceUrl(), {
       ...COMMON_FETCH_OPTIONS,
-      body: JSON.stringify(item),
+      body: JSON.stringify(applyFieldMap(item, true)),
       method: "POST"
     });
-    return await response.json();
+    return applyFieldMap(await response.json());
   }
 
   public async getAll(): Promise<T[]> {
     const response = await fetch(this.getResourceUrl(), COMMON_FETCH_OPTIONS);
-    return await response.json();
+    return (await response.json()).map((item: T) => applyFieldMap(item));
   }
 
   public async update(item: Partial<T>): Promise<T> {
     const response = await fetch(this.getResourceUrl((item as any).id), {
       ...COMMON_FETCH_OPTIONS,
-      body: JSON.stringify(item),
+      body: JSON.stringify(applyFieldMap(item, true)),
       method: "PATCH"
     });
-    return await response.json();
+    return applyFieldMap(await response.json());
   }
 
   public async delete(id: number): Promise<void> {

@@ -1,4 +1,5 @@
 import { createModel, ModelConfig } from "@rematch/core";
+
 import environment from "psyche/environment";
 import Backend from "psyche/store/backends/backend";
 import LocalStorageBackend from "psyche/store/backends/local-storage-backend";

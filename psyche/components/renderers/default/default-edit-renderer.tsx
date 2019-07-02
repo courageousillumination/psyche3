@@ -3,34 +3,39 @@ import { Field, Form } from "react-final-form";
 
 import { EditRenderer } from "psyche/components/renderers/renderer";
 
-const DefaultEditRenderer: EditRenderer = ({
-  note,
-  updateNote,
-  finishEditing
-}) => {
+import * as styles from "psyche/styles/renderers/default/default-edit-renderer.scss";
+
+const DefaultEditRenderer: EditRenderer = ({ note, updateNote, actions }) => {
   return (
     <Form
       onSubmit={data => {
-        data.body = data.body || ""; // Make sure we allow empty bodies.
+        // Allow empty values (which will override the previous values)
+        data.body = data.body || "";
+        data.noteType = data.noteType || "";
         updateNote({ ...data, id: note.id });
-        finishEditing();
+        actions.goToNote();
       }}
       initialValues={{
         body: note.body,
+        noteType: note.noteType,
         title: note.title
       }}
       render={({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
-            <div>
-              <Field name="title" component="input" autoComplete="off" />
-            </div>
-            <div>
-              <Field name="body" component="textarea" />
-            </div>
-            <div>
-              <button type="submit">Save</button>
-            </div>
+            <Field
+              name="title"
+              component="input"
+              autoComplete="off"
+              className={styles.titleInput}
+            />
+            <Field
+              name="body"
+              component="textarea"
+              className={styles.bodyTextarea}
+            />
+            <Field name="noteType" component="input" />
+            <button type="submit">Save</button>
           </form>
         );
       }}
