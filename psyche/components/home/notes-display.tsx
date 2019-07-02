@@ -1,6 +1,7 @@
-import NoteCard from "psyche/components/home/note-card";
-import { Note } from "psyche/types/models";
 import React from "react";
+
+import getRenderer from "psyche/components/renderers";
+import { Note } from "psyche/types/models";
 
 export interface Props {
   notes: Note[];
@@ -15,14 +16,10 @@ const NotesDisplay: React.FunctionComponent<Props> = ({
 }) => {
   return (
     <div>
-      {notes.map(note => (
-        <NoteCard
-          note={note}
-          key={note.id}
-          deleteNote={() => deleteNote(note.id)}
-          onClick={() => goToNote(note.id)}
-        />
-      ))}
+      {notes.map((note, i) => {
+        const ShortRenderer = getRenderer("").short;
+        return <ShortRenderer note={note} key={i} navigateToNote={goToNote} />;
+      })}
     </div>
   );
 };
