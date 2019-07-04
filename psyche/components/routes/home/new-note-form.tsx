@@ -22,9 +22,9 @@ const NewNoteForm: React.FunctionComponent<Props> = ({ createNote }) => {
       render={({ handleSubmit, form }) => {
         return (
           <form
-            onSubmit={event => {
-              handleSubmit(event);
-              setTimeout(form.reset);
+            onSubmit={async event => {
+              await handleSubmit(event);
+              form.reset();
             }}
           >
             <Field
