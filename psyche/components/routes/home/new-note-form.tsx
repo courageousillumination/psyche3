@@ -24,7 +24,7 @@ const NewNoteForm: React.FunctionComponent<Props> = ({ createNote }) => {
           <form
             onSubmit={event => {
               handleSubmit(event);
-              setTimeout(() => form.reset(), 0);
+              setTimeout(form.reset);
             }}
           >
             <Field
