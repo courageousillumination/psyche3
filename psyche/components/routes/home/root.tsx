@@ -2,6 +2,7 @@ import { History } from "history";
 import React from "react";
 import { connect } from "react-redux";
 
+import { getActions } from "psyche/components/renderers";
 import NewNoteForm from "psyche/components/routes/home/new-note-form";
 import NotesDisplay from "psyche/components/routes/home/notes-display";
 import LoadingIndicator from "psyche/components/shared/loading-indicator";
@@ -9,8 +10,7 @@ import { Dispatch, RootState } from "psyche/store";
 import { Note } from "psyche/types/models";
 
 export interface DispatchProps {
-  createNote: (note: Note) => void;
-  deleteNote: (id: number) => void;
+  dispatch: Dispatch;
 }
 
 export interface StateProps {
@@ -30,19 +30,18 @@ export type Props = DispatchProps & StateProps & OwnProps;
  * explore specific notes more in depth.
  */
 export const Home: React.FunctionComponent<Props> = ({
-  createNote,
-  deleteNote,
+  dispatch,
   notes,
   isLoading,
   history
 }) => {
   return (
     <div>
-      <NewNoteForm createNote={createNote} />
+      <NewNoteForm createNote={dispatch.notes.createNote} />
       {isLoading && !notes.length ? (
         <LoadingIndicator />
       ) : (
-        <NotesDisplay notes={notes} history={history} />
+        <NotesDisplay notes={notes} actions={getActions(history, dispatch)} />
       )}
     </div>
   );
@@ -50,10 +49,7 @@ export const Home: React.FunctionComponent<Props> = ({
 
 const mapDispatch: (dispatch: any) => DispatchProps = (
   dispatch: Dispatch
-): DispatchProps => ({
-  createNote: dispatch.notes.createNote,
-  deleteNote: dispatch.notes.deleteNote
-});
+): DispatchProps => ({ dispatch });
 
 const mapState = (state: RootState): StateProps => ({
   isLoading: state.notes.isLoading,

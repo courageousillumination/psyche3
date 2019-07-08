@@ -5,15 +5,15 @@ import { EditRenderer } from "psyche/components/renderers/renderer";
 
 import * as styles from "psyche/styles/renderers/default/default-edit-renderer.scss";
 
-const DefaultEditRenderer: EditRenderer = ({ note, updateNote, actions }) => {
+const DefaultEditRenderer: EditRenderer = ({ note, actions }) => {
   return (
     <Form
       onSubmit={data => {
         // Allow empty values (which will override the previous values)
         data.body = data.body || "";
         data.noteType = data.noteType || "";
-        updateNote({ ...data, id: note.id });
-        actions.goToNote();
+        actions.updateNote({ ...data, id: note.id });
+        actions.goToNote(note);
       }}
       initialValues={{
         body: note.body,

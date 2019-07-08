@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { Note } from "psyche/types/models";
 
 const getNoteById = (id: number, notes: Note[]): Note | null => {
@@ -12,4 +14,10 @@ const getChildren = (note: Note, notes: Note[]): Note[] => {
   return allChildren.filter(x => !!x) as Note[];
 };
 
-export { getChildren, getNoteById };
+/** Gets all notes that are not children of at least one other note. */
+const getRootNotes = (notes: Note[]): Note[] => {
+  const children = _.flatten(notes.map(x => x.children || []));
+  return notes.filter(note => !children.includes(note.id));
+};
+
+export { getChildren, getNoteById, getRootNotes };

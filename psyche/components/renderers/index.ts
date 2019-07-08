@@ -6,6 +6,7 @@ import {
   Renderer,
   RendererActions
 } from "psyche/components/renderers/renderer";
+import { Dispatch } from "psyche/store";
 import { Note } from "psyche/types/models";
 
 const getRenderer = (noteType?: string): Renderer => {
@@ -17,10 +18,12 @@ const getRenderer = (noteType?: string): Renderer => {
   }
 };
 
-const getActions = (note: Note, history: History): RendererActions => {
+const getActions = (history: History, dispatch: Dispatch): RendererActions => {
   return {
-    goToEditNote: () => history.push(`/note/${note.id}/edit`),
-    goToNote: () => history.push(`/note/${note.id}`)
+    createNote: dispatch.notes.createNote,
+    goToEditNote: (note: Note) => history.push(`/note/${note.id}/edit`),
+    goToNote: (note: Note) => history.push(`/note/${note.id}`),
+    updateNote: dispatch.notes.updateNote
   };
 };
 export { getRenderer, getActions };

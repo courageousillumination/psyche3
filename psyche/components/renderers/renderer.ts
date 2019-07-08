@@ -1,8 +1,13 @@
 import { Note } from "psyche/types/models";
 
 export interface RendererActions {
-  goToNote: () => void; // Go to the note detail page.
-  goToEditNote: () => void; // Go to the edit page for the note.
+  // Navigation actions
+  goToNote: (note: Note) => void; // Go to the note detail page.
+  goToEditNote: (note: Note) => void; // Go to the edit page for the note.
+
+  // Modification actions
+  createNote: (note: Note) => void;
+  updateNote: (updates: Partial<Note>) => void;
 }
 
 export interface CommonRendererProps {
@@ -17,11 +22,8 @@ export interface ShortRenderer
 export interface LongRenderer
   extends React.FunctionComponent<CommonRendererProps> {}
 
-export interface EditRendererProps {
-  updateNote: (updates: Partial<Note>) => void;
-}
 export interface EditRenderer
-  extends React.FunctionComponent<CommonRendererProps & EditRendererProps> {}
+  extends React.FunctionComponent<CommonRendererProps> {}
 
 export interface Renderer {
   short: ShortRenderer;

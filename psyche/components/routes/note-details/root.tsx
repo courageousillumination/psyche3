@@ -12,9 +12,7 @@ import { getChildren, getNoteById } from "psyche/utils/notes";
 import * as styles from "psyche/styles/routes/note-details.scss";
 
 export interface DispatchProps {
-  updateNote: (note: Partial<Note>) => void;
-  createNote: (note: Note) => void;
-  deleteNote: (noteId: number) => void;
+  dispatch: Dispatch;
 }
 
 export interface StateProps {
@@ -32,8 +30,7 @@ const NoteDetails: React.FunctionComponent<Props> = ({
   history,
   notes,
   match,
-  updateNote,
-  deleteNote
+  dispatch
 }) => {
   const note = getNoteById(+match.params.id, notes);
   if (!note) {
@@ -42,20 +39,15 @@ const NoteDetails: React.FunctionComponent<Props> = ({
   const children = getChildren(note, notes);
   const isEditing = !!match.params.edit;
   const { edit: EditRenderer, long: LongRenderer } = getRenderer(note.noteType);
-  const actions = getActions(note, history);
+  const actions = getActions(history, dispatch);
   return (
     <div className={styles.container}>
       {isEditing ? (
         <div>
-          <EditRenderer
-            updateNote={updateNote}
-            note={note}
-            actions={actions}
-            children={children}
-          />
+          <EditRenderer note={note} actions={actions} children={children} />
           <button
             onClick={() => {
-              deleteNote(note.id);
+              dispatch.notes.deleteNote(note.id);
               history.push("/");
             }}
           >
@@ -78,11 +70,7 @@ const mapState = (state: RootState): StateProps => ({
 
 const mapDispatch: (dispatch: any) => DispatchProps = (
   dispatch: Dispatch
-): DispatchProps => ({
-  createNote: dispatch.notes.createNote,
-  deleteNote: dispatch.notes.deleteNote,
-  updateNote: dispatch.notes.updateNote
-});
+): DispatchProps => ({ dispatch });
 
 export default connect(
   mapState,
