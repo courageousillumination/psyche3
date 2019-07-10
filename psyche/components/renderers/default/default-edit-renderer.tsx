@@ -12,11 +12,13 @@ const DefaultEditRenderer: EditRenderer = ({ note, actions }) => {
         // Allow empty values (which will override the previous values)
         data.body = data.body || "";
         data.noteType = data.noteType || "";
+        data.color = data.color || "";
         actions.updateNote({ ...data, id: note.id });
         actions.goToNote(note);
       }}
       initialValues={{
         body: note.body,
+        color: note.color,
         noteType: note.noteType,
         title: note.title
       }}
@@ -34,7 +36,14 @@ const DefaultEditRenderer: EditRenderer = ({ note, actions }) => {
               component="textarea"
               className={styles.bodyTextarea}
             />
-            <Field name="noteType" component="input" />
+            <label>
+              Note Type:
+              <Field name="noteType" component="input" />
+            </label>
+            <label>
+              Color
+              <Field name="color" component="input" />
+            </label>
             <button type="submit">Save</button>
           </form>
         );

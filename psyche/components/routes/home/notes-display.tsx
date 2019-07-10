@@ -23,6 +23,7 @@ const NotesDisplay: React.FunctionComponent<Props> = ({ notes, actions }) => {
             key={i}
             className={styles.noteCard}
             onClick={() => actions.goToNote(note)}
+            style={{ backgroundColor: note.color }}
           >
             <ShortRenderer children={children} note={note} actions={actions} />
           </div>
