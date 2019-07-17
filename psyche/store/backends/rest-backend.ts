@@ -21,7 +21,7 @@ class RestBackend<T> implements Backend<T> {
   }
 
   public async runQuery(query: string) {
-    return this.getAll();
+    return resource<T>(this.resourceName).getAll({ query });
   }
 }
 

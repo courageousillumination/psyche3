@@ -1,4 +1,6 @@
 /** Utilities for working with REST resources */
+import queryString from "query-string";
+
 import environment from "psyche/environment";
 
 const COMMON_FETCH_OPTIONS = {
@@ -43,8 +45,11 @@ class RestResource<T> {
     return applyFieldMap(await response.json());
   }
 
-  public async getAll(): Promise<T[]> {
-    const response = await fetch(this.getResourceUrl(), COMMON_FETCH_OPTIONS);
+  public async getAll(queryParams: any = {}): Promise<T[]> {
+    const response = await fetch(
+      this.getResourceUrl() + "?" + queryString.stringify(queryParams),
+      COMMON_FETCH_OPTIONS
+    );
     return (await response.json()).map((item: T) => applyFieldMap(item));
   }
 

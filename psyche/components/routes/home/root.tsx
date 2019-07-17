@@ -83,7 +83,7 @@ const Home = () => {
   return (
     <div>
       <NewNoteForm />
-      <QueryLoader query={"foobar"} component={NoteList} />
+      <QueryLoader query={"parent:null"} component={NoteList} />
     </div>
   );
 };
