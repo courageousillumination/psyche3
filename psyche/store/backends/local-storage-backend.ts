@@ -45,6 +45,10 @@ class LocalStorageBackend<T> implements Backend<T> {
     this.saveToLocalStorage(allItems.filter((item: any) => item.id !== id));
   }
 
+  public async runQuery(query: string) {
+    return this.getAll();
+  }
+
   private saveToLocalStorage(items: T[]) {
     try {
       window.localStorage.setItem(this.resourceName, JSON.stringify(items));

@@ -22,11 +22,13 @@ const notesModelConfig: ModelConfig<NotesModel> = {
     async createNote(note: Note) {
       const newNote = await getBackend<Note>("notes").create(note);
       dispatch.notes.add(newNote);
+      dispatch.queries.rerunQueries();
       return newNote;
     },
     async deleteNote(noteId: number) {
       await getBackend<Note>("notes").delete(noteId);
       dispatch.notes.remove(noteId);
+      dispatch.queries.rerunQueries();
     },
     async updateNote(note: Partial<Note>) {
       const updated = await getBackend<Note>("notes").update(note);
@@ -83,4 +85,40 @@ const notesModelConfig: ModelConfig<NotesModel> = {
   }
 };
 
+export interface QueryModel {
+  queries: { [index: string]: number[] };
+  isLoading: boolean;
+}
+
+const queryModelConfig: ModelConfig<QueryModel> = {
+  effects: dispatch => ({
+    async runQuery(query: string) {
+      const results = await getBackend<Note>("notes").runQuery(query);
+      dispatch.queries.add(query, results.map(x => x.id));
+    },
+
+    async rerunQueries(payload: any, state) {
+      for (const query in state.queries.queries) {
+        dispatch.queries.runQuery(query);
+      }
+    }
+  }),
+  reducers: {
+    add(state, queryString: string, results: number[]) {
+      return {
+        ...state,
+        queries: {
+          ...state.queries,
+          [queryString]: results
+        }
+      };
+    }
+  },
+  state: {
+    isLoading: false,
+    queries: {}
+  }
+};
+
 export const notes = createModel(notesModelConfig);
+export const queries = createModel(queryModelConfig);

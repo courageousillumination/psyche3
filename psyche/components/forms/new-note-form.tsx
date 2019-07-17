@@ -4,15 +4,16 @@ import { Field, Form } from "react-final-form";
 import { Note } from "psyche/types/models";
 
 import * as styles from "psyche/styles/new-note-form.scss";
+import withNoteLoader from "../containers/note-loader";
 
 export interface Props {
-  createNote: (note: Note) => void;
+  actions: any;
 }
 
-const NewNoteForm: React.FunctionComponent<Props> = ({ createNote }) => {
+const NewNoteForm: React.FunctionComponent<Props> = ({ actions }) => {
   return (
     <Form
-      onSubmit={data => createNote({ title: data.note, id: -1 })}
+      onSubmit={data => actions.createNote({ title: data.note, id: -1 })}
       validate={values => {
         if (!values.note) {
           return { note: "Required" };
@@ -42,4 +43,4 @@ const NewNoteForm: React.FunctionComponent<Props> = ({ createNote }) => {
   );
 };
 
-export default NewNoteForm;
+export default withNoteLoader(NewNoteForm);

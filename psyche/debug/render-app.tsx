@@ -18,8 +18,6 @@ document.body.append(root);
 
 installServiceWorker();
 
-store.dispatch.notes.loadNotes();
-
 ReactDom.render(
   <Provider store={store}>
     <HashRouter>

@@ -19,6 +19,10 @@ class RestBackend<T> implements Backend<T> {
   public async delete(id: number) {
     return resource<T>(this.resourceName).delete(id);
   }
+
+  public async runQuery(query: string) {
+    return this.getAll();
+  }
 }
 
 export default RestBackend;
