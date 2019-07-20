@@ -40,20 +40,24 @@ function withNoteLoader(
 
     public render = () => {
       const loadedNotes = this.getNoteObjects();
-      return (
+      return this.needsLoad() ? (
+        <div>Loading...</div>
+      ) : (
         <WrappedComponent notes={loadedNotes} actions={this.getNoteActions()} />
       );
     };
 
     private loadIfNecessary = () => {
-      if (!this.props.notes) {
-        return;
+      if (this.needsLoad()) {
+        this.props.dispatch.notes.loadNotes();
       }
-      if (this.getNoteObjects().length === this.props.notes.length) {
-        // This isn't the right check, but it'll do for now.
-        return;
-      }
-      this.props.dispatch.notes.loadNotes();
+    };
+
+    private needsLoad = () => {
+      return (
+        this.props.notes &&
+        this.getNoteObjects().length !== this.props.notes.length
+      );
     };
 
     private getNoteObjects = () => {
@@ -69,7 +73,7 @@ function withNoteLoader(
         create: this.props.dispatch.notes.createNote,
         delete: this.props.dispatch.notes.deleteNote,
         goTo: (noteId, edit = false) => {
-          this.props.history.push(`/notes/${noteId}/${edit ? "edit" : ""}`);
+          this.props.history.push(`/note/${noteId}/${edit ? "edit" : ""}`);
         },
         update: this.props.dispatch.notes.updateNote
       };

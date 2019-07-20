@@ -8,7 +8,7 @@ export interface Note {
 }
 
 export interface NoteActions {
-  goTo: (noteId: number, edit: boolean) => void;
+  goTo: (noteId: number, edit?: boolean) => void;
   create: (note: Partial<Note>) => void;
   update: (note: Partial<Note>) => void;
   delete: (note: Note) => void;
