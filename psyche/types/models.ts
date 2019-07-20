@@ -6,3 +6,10 @@ export interface Note {
   noteType?: string;
   id: number;
 }
+
+export interface NoteActions {
+  goTo: (noteId: number, edit: boolean) => void;
+  create: (note: Partial<Note>) => void;
+  update: (note: Partial<Note>) => void;
+  delete: (note: Note) => void;
+}

@@ -1,19 +1,18 @@
 import React from "react";
 import { Field, Form } from "react-final-form";
 
-import { Note } from "psyche/types/models";
-
 import * as styles from "psyche/styles/new-note-form.scss";
+import { NoteActions } from "psyche/types/models";
 import withNoteLoader from "../containers/note-loader";
 
 export interface Props {
-  actions: any;
+  actions: NoteActions;
 }
 
 const NewNoteForm: React.FunctionComponent<Props> = ({ actions }) => {
   return (
     <Form
-      onSubmit={data => actions.createNote({ title: data.note, id: -1 })}
+      onSubmit={data => actions.create({ title: data.note })}
       validate={values => {
         if (!values.note) {
           return { note: "Required" };

@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
+import { RouteComponentProps, withRouter } from "react-router";
 
-import { Note } from "psyche/types/models";
-import { RootState, Dispatch } from "psyche/store";
+import { Dispatch, RootState } from "psyche/store";
+import { Note, NoteActions } from "psyche/types/models";
 
 export interface StateProps {
   storeNotes: Note[];
@@ -16,11 +17,11 @@ export interface OwnProps {
   notes?: number[];
 }
 
-export type Props = StateProps & DispatchProps & OwnProps;
+export type Props = StateProps & DispatchProps & OwnProps & RouteComponentProps;
 
 export interface WrappedProps {
   notes: Note[];
-  actions: any;
+  actions: NoteActions;
 }
 
 function withNoteLoader(
@@ -39,17 +40,16 @@ function withNoteLoader(
 
     public render = () => {
       const loadedNotes = this.getNoteObjects();
-      const actions = {
-        createNote: this.props.dispatch.notes.createNote
-      };
-      return <WrappedComponent notes={loadedNotes} actions={actions} />;
+      return (
+        <WrappedComponent notes={loadedNotes} actions={this.getNoteActions()} />
+      );
     };
 
     private loadIfNecessary = () => {
       if (!this.props.notes) {
         return;
       }
-      if (this.getNoteObjects().length == this.props.notes.length) {
+      if (this.getNoteObjects().length === this.props.notes.length) {
         // This isn't the right check, but it'll do for now.
         return;
       }
@@ -62,6 +62,17 @@ function withNoteLoader(
             note => (this.props.notes || []).indexOf(note.id) >= 0
           )
         : [];
+    };
+
+    private getNoteActions = (): NoteActions => {
+      return {
+        create: this.props.dispatch.notes.createNote,
+        delete: this.props.dispatch.notes.deleteNote,
+        goTo: (noteId, edit = false) => {
+          this.props.history.push(`/notes/${noteId}/${edit ? "edit" : ""}`);
+        },
+        update: this.props.dispatch.notes.updateNote
+      };
     };
   };
 
@@ -76,7 +87,7 @@ function withNoteLoader(
   return connect(
     mapState,
     mapDispatch
-  )(wrapper);
+  )(withRouter(wrapper));
 }
 
 export default withNoteLoader;
