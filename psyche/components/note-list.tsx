@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import withNoteLoader from "psyche/components/containers/note-loader";
 import { getShortRenderer } from "psyche/components/renderers";
@@ -17,7 +18,11 @@ export const NoteList: React.FunctionComponent<Props> = ({
     <div>
       {notes.map((note, i) => {
         const ShortRenderer = getShortRenderer(note);
-        return <ShortRenderer note={note} key={i} actions={actions} />;
+        return (
+          <Link to={`/note/${note.id}`} key={i}>
+            <ShortRenderer note={note} actions={actions} />
+          </Link>
+        );
       })}
     </div>
   );

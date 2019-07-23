@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 import NoteList from "psyche/components/note-list";
 import { Renderer } from "psyche/components/renderers/types";
@@ -10,13 +11,15 @@ const JournalLongRenderer: Renderer = ({ note, actions }) => {
       <button
         onClick={async () => {
           const child = (await actions.create({
-            title: "foobar",
-            body: "foobaz"
+            title: `${moment().format("YYYY-MM-DD")}`,
+            body: note.body
           })) as any;
           actions.update({
             children: [...(note.children || []), child.id],
             id: note.id
           });
+          console.log(child, child.id);
+          actions.goTo(child.id, true);
         }}
       >
         Create Child

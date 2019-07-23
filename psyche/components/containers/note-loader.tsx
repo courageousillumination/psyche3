@@ -71,7 +71,7 @@ function withNoteLoader(
     private getNoteActions = (): NoteActions => {
       return {
         create: this.props.dispatch.notes.createNote,
-        delete: this.props.dispatch.notes.deleteNote,
+        delete: note => this.props.dispatch.notes.deleteNote(note.id),
         goTo: (noteId, edit = false) => {
           this.props.history.push(`/note/${noteId}/${edit ? "edit" : ""}`);
         },
