@@ -1,0 +1,28 @@
+@import "common/colors.scss";
+
+.noteCard {
+  box-shadow: 5px 5px 5px grey;
+  margin: 10px 10px 10px 10px;
+  border-radius: 5px;
+  border-color: lightgray;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
+}
+
+.noteCardContainer {
+  width: 50%;
+  text-decoration: none;
+  color: black;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 500px) {
+  .noteCardContainer {
+    width: 200px; // Larger screens should have more cards per row.
+  }
+}

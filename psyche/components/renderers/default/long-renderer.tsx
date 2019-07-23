@@ -5,7 +5,8 @@ import { Renderer } from "psyche/components/renderers/types";
 const DefaultLongRenderer: Renderer = ({ note }) => {
   return (
     <div>
-      Long Renderer {note.title} {note.body}
+      <h2>{note.title}</h2>
+      <div>{note.body}</div>
     </div>
   );
 };

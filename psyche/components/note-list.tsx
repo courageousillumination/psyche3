@@ -5,6 +5,8 @@ import withNoteLoader from "psyche/components/containers/note-loader";
 import { getShortRenderer } from "psyche/components/renderers";
 import { Note, NoteActions } from "psyche/types/models";
 
+import * as styles from "psyche/styles/note-list.scss";
+
 export interface Props {
   notes: Note[];
   actions: NoteActions;
@@ -15,12 +17,18 @@ export const NoteList: React.FunctionComponent<Props> = ({
   actions
 }) => {
   return (
-    <div>
+    <div className={styles.container}>
       {notes.map((note, i) => {
         const ShortRenderer = getShortRenderer(note);
         return (
-          <Link to={`/note/${note.id}`} key={i}>
-            <ShortRenderer note={note} actions={actions} />
+          <Link
+            to={`/note/${note.id}`}
+            key={i}
+            className={styles.noteCardContainer}
+          >
+            <div className={styles.noteCard}>
+              <ShortRenderer note={note} actions={actions} />
+            </div>
           </Link>
         );
       })}

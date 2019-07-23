@@ -3,6 +3,8 @@ import { Field, Form } from "react-final-form";
 
 import { Renderer } from "psyche/components/renderers/types";
 
+import * as styles from "psyche/styles/renderers/default/edit.scss";
+
 const DefaultEditRenderer: Renderer = ({ note, actions }) => {
   return (
     <Form
@@ -23,11 +25,23 @@ const DefaultEditRenderer: Renderer = ({ note, actions }) => {
       render={({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
-            <Field name="title" component="input" autoComplete="off" />
-            <Field name="body" component="textarea" />
+            <Field
+              className={styles.titleInput}
+              name="title"
+              component="input"
+              autoComplete="off"
+            />
+            <Field
+              className={styles.bodyTextArea}
+              name="body"
+              component="textarea"
+            />
             <label>
               Note Type:
-              <Field name="noteType" component="input" />
+              <Field name="noteType" component="select">
+                <option value="">None</option>
+                <option value="journal">Journal</option>
+              </Field>
             </label>
             <label>
               Color

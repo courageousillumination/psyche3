@@ -1,1 +1,4 @@
-@import "new-note-form.css";
+@import "common/reset.scss"; // Reset needs to be imported somewhere, and this is as close to the root as I can get it.
+.contentContainer {
+  margin: 10px 10px 10px 10px;
+}

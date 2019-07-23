@@ -1,9 +1,10 @@
 import React from "react";
 import { Field, Form } from "react-final-form";
 
-import * as styles from "psyche/styles/new-note-form.scss";
 import { NoteActions } from "psyche/types/models";
-import withNoteLoader from "../containers/note-loader";
+import withNoteLoader from "psyche/components/containers/note-loader";
+
+import * as styles from "psyche/styles/forms/common.scss";
 
 export interface Props {
   actions: NoteActions;
@@ -29,7 +30,7 @@ const NewNoteForm: React.FunctionComponent<Props> = ({ actions }) => {
           >
             <Field
               name="note"
-              className={styles.noteInput}
+              className={styles.primaryInput}
               component="input"
               placeholder="Say Something..."
               data-test="new-note-form.input"

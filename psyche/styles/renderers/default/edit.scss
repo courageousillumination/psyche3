@@ -1,0 +1,10 @@
+@import "../../forms/common.scss";
+
+.titleInput {
+  @extend .primaryInput;
+}
+
+.bodyTextArea {
+  width: 100%;
+  height: 300px;
+}
