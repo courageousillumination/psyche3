@@ -36,7 +36,6 @@ class QueryLoader extends React.Component<Props> {
   public render = () => {
     const Component = this.props.component;
     const queryResults = this.props.queries[this.props.query] || [];
-    console.log(this.props.queries);
     return <Component notes={queryResults} />;
   };
 

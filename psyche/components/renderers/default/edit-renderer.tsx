@@ -1,11 +1,9 @@
 import React from "react";
 import { Field, Form } from "react-final-form";
 
-import { EditRenderer } from "psyche/components/renderers/renderer";
+import { Renderer } from "psyche/components/renderers/types";
 
-import * as styles from "psyche/styles/renderers/default/default-edit-renderer.scss";
-
-const DefaultEditRenderer: EditRenderer = ({ note, actions }) => {
+const DefaultEditRenderer: Renderer = ({ note, actions }) => {
   return (
     <Form
       onSubmit={data => {
@@ -13,8 +11,8 @@ const DefaultEditRenderer: EditRenderer = ({ note, actions }) => {
         data.body = data.body || "";
         data.noteType = data.noteType || "";
         data.color = data.color || "";
-        actions.updateNote({ ...data, id: note.id });
-        actions.goToNote(note);
+        actions.update({ ...data, id: note.id });
+        actions.goTo(note.id);
       }}
       initialValues={{
         body: note.body,
@@ -25,17 +23,8 @@ const DefaultEditRenderer: EditRenderer = ({ note, actions }) => {
       render={({ handleSubmit }) => {
         return (
           <form onSubmit={handleSubmit}>
-            <Field
-              name="title"
-              component="input"
-              autoComplete="off"
-              className={styles.titleInput}
-            />
-            <Field
-              name="body"
-              component="textarea"
-              className={styles.bodyTextarea}
-            />
+            <Field name="title" component="input" autoComplete="off" />
+            <Field name="body" component="textarea" />
             <label>
               Note Type:
               <Field name="noteType" component="input" />
