@@ -6,18 +6,16 @@ const getNoteById = (id: number, notes: Note[]): Note | null => {
   return notes.find(x => x.id === id) || null;
 };
 
-/** Gets all child notes for a given note. */
-const getChildren = (note: Note, notes: Note[]): Note[] => {
-  const allChildren = note.children
-    ? note.children.map(id => getNoteById(id, notes))
+const getChildIds = (note: Note): number[] => {
+  return note.relationshipsSource
+    ? note.relationshipsSource.map(({ destination }) => destination)
     : [];
-  return allChildren.filter(x => !!x) as Note[];
 };
 
-/** Gets all notes that are not children of at least one other note. */
-const getRootNotes = (notes: Note[]): Note[] => {
-  const children = _.flatten(notes.map(x => x.children || []));
-  return notes.filter(note => !children.includes(note.id));
+const getParentIds = (note: Note): number[] => {
+  return note.relationshipsDest
+    ? note.relationshipsDest.map(({ source }) => source)
+    : [];
 };
 
-export { getChildren, getNoteById, getRootNotes };
+export { getChildIds, getParentIds, getNoteById };

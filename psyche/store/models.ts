@@ -4,7 +4,7 @@ import environment from "psyche/environment";
 import Backend from "psyche/store/backends/backend";
 import LocalStorageBackend from "psyche/store/backends/local-storage-backend";
 import RestBackend from "psyche/store/backends/rest-backend";
-import { Note } from "psyche/types/models";
+import { Note, Relationship } from "psyche/types/models";
 
 function getBackend<T>(resourceName: string): Backend<T> {
   return environment.useRestBackend
@@ -40,6 +40,13 @@ const notesModelConfig: ModelConfig<NotesModel> = {
       const allNotes = await getBackend<Note>("notes").getAll();
       dispatch.notes.addNotes(allNotes);
       dispatch.notes.setIsLoading(false);
+    },
+
+    async createRelationship(relationship: Relationship) {
+      await getBackend<Relationship>("relationships").create(relationship);
+      // TODO: Don't load everything again if we can avoid it...
+      dispatch.notes.clearAll();
+      dispatch.notes.loadNotes();
     }
   }),
   reducers: {
@@ -76,6 +83,13 @@ const notesModelConfig: ModelConfig<NotesModel> = {
       return {
         ...state,
         isLoading
+      };
+    },
+
+    clearAll(state) {
+      return {
+        ...state,
+        notes: []
       };
     }
   },

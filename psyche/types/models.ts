@@ -1,5 +1,13 @@
+export interface Relationship {
+  id: number;
+  source: number;
+  destination: number;
+  relationshipType: string;
+}
+
 export interface Note {
-  children?: number[];
+  relationshipsSource?: Relationship[];
+  relationshipsDest?: Relationship[];
   color?: string;
   title: string;
   body?: string;
@@ -12,4 +20,5 @@ export interface NoteActions {
   create: (note: Partial<Note>) => void;
   update: (note: Partial<Note>) => void;
   delete: (note: Note) => void;
+  createRelationship: (source: Note, dest: Note, type: string) => void;
 }

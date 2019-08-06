@@ -13,7 +13,12 @@ const COMMON_FETCH_OPTIONS = {
  * Maps any remote field names that may be different from local fields.
  * The first entry in the tuple is the remote, and the second is the local.
  */
-const FIELD_MAP = [{ remote: "note_type", local: "noteType" }];
+const FIELD_MAP = [
+  { remote: "note_type", local: "noteType" },
+  { remote: "relationship_type", local: "relationshipType" },
+  { remote: "relationships_dest", local: "relationshipsDest" },
+  { remote: "relationships_source", local: "relationshipsSource" }
+];
 
 const applyFieldMap = (obj: any, outbound = false) => {
   const modifiedObj = { ...obj };

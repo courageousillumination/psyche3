@@ -75,7 +75,18 @@ function withNoteLoader(
         goTo: (noteId, edit = false) => {
           this.props.history.push(`/note/${noteId}/${edit ? "edit" : ""}`);
         },
-        update: this.props.dispatch.notes.updateNote
+        update: this.props.dispatch.notes.updateNote,
+        createRelationship: (
+          source: Note,
+          dest: Note,
+          relationshipType: string
+        ) => {
+          this.props.dispatch.notes.createRelationship({
+            source: source.id,
+            destination: dest.id,
+            relationshipType
+          });
+        }
       };
     };
   };
