@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { createModel, ModelConfig } from "@rematch/core";
 
 import environment from "psyche/environment";
@@ -60,13 +61,13 @@ const notesModelConfig: ModelConfig<NotesModel> = {
     add(state, note: Note) {
       return {
         ...state,
-        notes: [...state.notes, note]
+        notes: _.unionBy([note], state.notes, note => note.id)
       };
     },
     addNotes(state, allNotes: Note[]) {
       return {
         ...state,
-        notes: [...state.notes, ...allNotes]
+        notes: _.unionBy(allNotes, state.notes, note => note.id)
       };
     },
     update(state, note: Note) {
