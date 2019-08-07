@@ -2,7 +2,7 @@ import ReactMarkdown from "react-markdown";
 import React from "react";
 
 import { Renderer } from "psyche/components/renderers/types";
-import { getParentIds } from "psyche/utils/notes";
+import { getParentIds, getChildIds } from "psyche/utils/notes";
 import NoteList from "psyche/components/note-list";
 
 const DefaultLongRenderer: Renderer = ({ note }) => {
@@ -10,9 +10,16 @@ const DefaultLongRenderer: Renderer = ({ note }) => {
     <div>
       <h2>{note.title}</h2>
       <ReactMarkdown source={note.body} />
-      <div>
-        Parents: <NoteList notes={getParentIds(note)} />
-      </div>
+      {getParentIds(note).length > 0 ? (
+        <div>
+          Parents: <NoteList notes={getParentIds(note)} />
+        </div>
+      ) : null}
+      {getChildIds(note).length > 0 ? (
+        <div>
+          Children: <NoteList notes={getChildIds(note)} />
+        </div>
+      ) : null}
     </div>
   );
 };
