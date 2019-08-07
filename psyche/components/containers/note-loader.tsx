@@ -77,16 +77,17 @@ function withNoteLoader(
         },
         update: this.props.dispatch.notes.updateNote,
         createRelationship: (
-          source: Note,
-          dest: Note,
+          source: number,
+          dest: number,
           relationshipType: string
         ) => {
           this.props.dispatch.notes.createRelationship({
-            source: source.id,
-            destination: dest.id,
+            source: source,
+            destination: dest,
             relationshipType
           });
-        }
+        },
+        deleteRelationship: this.props.dispatch.notes.deleteRelationship
       };
     };
   };

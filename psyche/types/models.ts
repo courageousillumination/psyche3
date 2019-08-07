@@ -20,5 +20,6 @@ export interface NoteActions {
   create: (note: Partial<Note>) => void;
   update: (note: Partial<Note>) => void;
   delete: (note: Note) => void;
-  createRelationship: (source: Note, dest: Note, type: string) => void;
+  createRelationship: (source: number, dest: number, type: string) => void;
+  deleteRelationship: (id: number) => void;
 }

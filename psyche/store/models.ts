@@ -47,6 +47,13 @@ const notesModelConfig: ModelConfig<NotesModel> = {
       // TODO: Don't load everything again if we can avoid it...
       dispatch.notes.clearAll();
       dispatch.notes.loadNotes();
+    },
+
+    async deleteRelationship(relationshipId: number) {
+      await getBackend<Relationship>("relationships").delete(relationshipId);
+      // TODO: Don't load everything again if we can avoid it...
+      dispatch.notes.clearAll();
+      dispatch.notes.loadNotes();
     }
   }),
   reducers: {

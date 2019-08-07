@@ -15,7 +15,7 @@ const JournalLongRenderer: Renderer = ({ note, actions }) => {
             title: `${moment().format("YYYY-MM-DD")}`,
             body: note.body
           })) as any;
-          actions.createRelationship(note, child, "parent");
+          actions.createRelationship(note.id, child.id, "parent");
           actions.goTo(child.id, true);
         }}
       >
