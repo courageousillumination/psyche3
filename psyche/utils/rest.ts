@@ -5,6 +5,7 @@ import environment from "psyche/environment";
 
 const COMMON_FETCH_OPTIONS = {
   headers: {
+    Authorization: `Token ${environment.apiToken}`,
     "Content-Type": "application/json"
   }
 };
